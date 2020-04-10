@@ -4,6 +4,7 @@ import Reader from '@jacobbubu/pull-reader'
 import through from '@jacobbubu/pull-through'
 import split from './split-buffer'
 import increment from './increment-buffer'
+import { isZeros, copy } from './utils'
 
 const isBuffer = Buffer.isBuffer
 const concat = Buffer.concat
@@ -17,28 +18,18 @@ function unbox_detached(mac: Buffer, boxed: Buffer, nonce: Buffer, key: Buffer) 
 
 const max = 1024 * 4
 
-const NONCE_LEN = 24
+export const KEY_LENGTH = 56
+export const NONCE_LEN = 24
+
+const PURE_KEY_LENGTH = KEY_LENGTH - NONCE_LEN
 const HEADER_LEN = 2 + 16 + 16
-
-function isZeros(buf: Buffer) {
-  for (let i = 0; i < buf.length; i++) {
-    if (buf[i] !== 0) return false
-  }
-  return true
-}
-
-function copy(aBuf: Buffer) {
-  const bBuf = Buffer.alloc(aBuf.length)
-  aBuf.copy(bBuf, 0, 0, aBuf.length)
-  return bBuf
-}
 
 export function createBoxStream(key: Buffer, initNonce?: Buffer) {
   let _initNonce: Buffer
-  if (key.length === 56) {
-    _initNonce = key.slice(32, 56)
-    key = key.slice(0, 32)
-  } else if (!(key.length === 32 && initNonce!.length === 24)) {
+  if (key.length === KEY_LENGTH) {
+    _initNonce = key.slice(PURE_KEY_LENGTH, KEY_LENGTH)
+    key = key.slice(0, PURE_KEY_LENGTH)
+  } else if (!(key.length === PURE_KEY_LENGTH && initNonce!.length === NONCE_LEN)) {
     throw new Error('nonce must be 24 bytes')
   } else {
     _initNonce = initNonce!
@@ -94,10 +85,10 @@ export function createBoxStream(key: Buffer, initNonce?: Buffer) {
 
 export function createUnboxStream(key: Buffer, nonce?: Buffer) {
   let _nonce: Buffer
-  if (key.length === 56) {
-    _nonce = key.slice(32, 56)
-    key = key.slice(0, 32)
-  } else if (!(key.length === 32 && nonce!.length === 24)) {
+  if (key.length === KEY_LENGTH) {
+    _nonce = key.slice(PURE_KEY_LENGTH, KEY_LENGTH)
+    key = key.slice(0, PURE_KEY_LENGTH)
+  } else if (!(key.length === PURE_KEY_LENGTH && nonce!.length === NONCE_LEN)) {
     throw new Error('nonce must be 24 bytes')
   } else {
     _nonce = copy(nonce!)
