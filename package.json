@@ -28,7 +28,8 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "tsnd tools/semantic-release-prepare",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "ex:net": "tsnd --respawn examples/net.ts"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -76,7 +77,8 @@
   "devDependencies": {
     "@jacobbubu/pull-bitflipper": "^1.0.0",
     "@jacobbubu/pull-randomly-split": "^1.0.0",
-    "@jacobbubu/pull-stream-types": "^1.0.3",
+    "@jacobbubu/pull-split": "^1.0.0",
+    "@jacobbubu/pull-stream-types": "^1.1.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.11.0",
     "@types/rc": "^1.1.0",
@@ -100,6 +102,7 @@
     "rimraf": "^3.0.2",
     "semantic-release": "^17.0.4",
     "shelljs": "^0.8.3",
+    "stream-to-pull-stream": "^1.7.3",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.8.1",
     "ts-node-dev": "^1.0.0-pre.44",
@@ -115,7 +118,7 @@
   },
   "dependencies": {
     "@jacobbubu/pull-reader": "^1.0.0",
-    "@jacobbubu/pull-through": "^1.0.1",
+    "@jacobbubu/pull-through": "^1.1.1",
     "chloride": "^2.2.14"
   }
 }

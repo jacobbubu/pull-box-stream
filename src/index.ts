@@ -26,6 +26,7 @@ const HEADER_LEN = 2 + 16 + 16
 
 export function createBoxStream(key: Buffer, initNonce?: Buffer) {
   let _initNonce: Buffer
+  key = Buffer.from(key)
   if (key.length === KEY_LENGTH) {
     _initNonce = key.slice(PURE_KEY_LENGTH, KEY_LENGTH)
     key = key.slice(0, PURE_KEY_LENGTH)
@@ -85,6 +86,7 @@ export function createBoxStream(key: Buffer, initNonce?: Buffer) {
 
 export function createUnboxStream(key: Buffer, nonce?: Buffer) {
   let _nonce: Buffer
+  key = Buffer.from(key)
   if (key.length === KEY_LENGTH) {
     _nonce = key.slice(PURE_KEY_LENGTH, KEY_LENGTH)
     key = key.slice(0, PURE_KEY_LENGTH)
